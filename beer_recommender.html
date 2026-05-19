@@ -838,7 +838,7 @@ function rebuildStyleChips(cat) {
 // ═══════════════════════════════════════════
 async function getRecommendations() {
   const beerInput = document.getElementById('beerInput').value.trim();
-  const browseMode = !beerInput; // no input = browse mode (filter-only, top 10)
+  const browseMode = !beerInput; // no input = browse mode (filter-only, top 5)
 
   const filtered = getFiltered();
   if (!filtered.length) {
@@ -868,7 +868,7 @@ async function getRecommendations() {
   if (browseMode) {
     prompt = 'A customer is browsing and wants top picks filtered by: ' + filterDesc + '.\n\n'
            + 'Available inventory:\n' + invText + '\n\n'
-           + 'Select the top 10 most interesting and diverse beers. Vary styles and ABV. No duplicate beers.\n\n'
+           + 'Select the top 5 most interesting and diverse beers. Vary styles and ABV. No duplicate beers.\n\n'
            + 'Respond with ONLY a JSON object like this (no other text):\n'
            + '{"summary":"intro text","recommendations":[{"name":"beer name","reason":"why its great"}]}';
   } else {
@@ -881,7 +881,7 @@ async function getRecommendations() {
 
   try {
     // Replace with your deployed Cloudflare Worker URL after setup
-    const WORKER_URL = 'https://draft-advisor.kyle-fromm.workers.dev';
+    const WORKER_URL = 'https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev';
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
