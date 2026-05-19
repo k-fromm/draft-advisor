@@ -868,15 +868,15 @@ async function getRecommendations() {
   if (browseMode) {
     prompt = 'A customer is browsing and wants top picks filtered by: ' + filterDesc + '.\n\n'
            + 'Available inventory:\n' + invText + '\n\n'
-           + 'Select the top 5 most interesting and diverse beers. Vary styles and ABV. No duplicate beers.\n\n'
-           + 'Respond with ONLY a JSON object like this (no other text):\n'
-           + '{"summary":"intro text","recommendations":[{"name":"beer name","reason":"why its great"}]}';
+           + 'IMPORTANT: Return EXACTLY 3 recommendations, no more, no less.\n'
+           + 'Respond with ONLY this JSON object, nothing else, no markdown:\n'
+           + '{"summary":"one sentence intro","recommendations":[{"name":"exact beer name","reason":"one sentence why"},{"name":"exact beer name","reason":"one sentence why"},{"name":"exact beer name","reason":"one sentence why"}]}';
   } else {
     prompt = 'A customer enjoys: ' + beerInput + '\n\n'
            + 'Available inventory:\n' + invText + '\n\n'
-           + 'Pick the top 3-5 best flavor matches from the inventory. Base on style, taste, and ABV.\n\n'
-           + 'Respond with ONLY a JSON object like this (no other text):\n'
-           + '{"summary":"personalized intro","recommendations":[{"name":"beer name","reason":"why it fits"}]}';
+           + 'IMPORTANT: Return EXACTLY 3 recommendations, no more, no less.\n'
+           + 'Respond with ONLY this JSON object, nothing else, no markdown:\n'
+           + '{"summary":"one sentence personalized intro","recommendations":[{"name":"exact beer name","reason":"one sentence why it fits"},{"name":"exact beer name","reason":"one sentence why it fits"},{"name":"exact beer name","reason":"one sentence why it fits"}]}';
   }
 
   try {
@@ -939,14 +939,14 @@ async function getRecommendations() {
 }
 
 // Attempt to recover a truncated JSON response from the AI
+// Recover partial JSON — extract whatever complete recs exist
 function salvageJSON(text) {
   try {
-    // Find the last complete recommendation object and close the JSON
     const summaryMatch = text.match(/"summary"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-    const recsMatch    = [...text.matchAll(/"name"\s*:\s*"([^"]+)"[^}]*"reason"\s*:\s*"((?:[^"\\]|\\.)*)"/g)];
-    if (!summaryMatch || !recsMatch.length) return null;
+    const recsMatch = [...text.matchAll(/"name"\s*:\s*"([^"]+)"[^}]*"reason"\s*:\s*"((?:[^"\\]|\\.)*)"/g)];
+    if (!recsMatch.length) return null;
     return {
-      summary: summaryMatch[1],
+      summary: summaryMatch ? summaryMatch[1] : 'Here are some great picks from our inventory.',
       recommendations: recsMatch.map(m => ({ name: m[1], reason: m[2] }))
     };
   } catch(e) { return null; }
