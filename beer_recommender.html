@@ -871,13 +871,13 @@ async function getRecommendations() {
   if (browseMode) {
     prompt = 'A customer is browsing and wants top picks filtered by: ' + filterDesc + '.\n\n'
            + 'Available inventory:\n' + invText + '\n\n'
-           + 'IMPORTANT: Return EXACTLY 5 recommendations, no more, no less.\n'
+           + 'IMPORTANT: You MUST return EXACTLY 5 recommendations. The JSON array must contain exactly 5 objects.\n'
            + 'Respond with ONLY this JSON object, nothing else, no markdown:\n'
            + '{"summary":"one sentence intro","recommendations":[{"name":"exact beer name","reason":"one sentence why"},{"name":"exact beer name","reason":"one sentence why"},{"name":"exact beer name","reason":"one sentence why"},{"name":"exact beer name","reason":"one sentence why"},{"name":"exact beer name","reason":"one sentence why"}]}';
   } else {
     prompt = 'A customer enjoys: ' + beerInput + '\n\n'
            + 'Available inventory:\n' + invText + '\n\n'
-           + 'IMPORTANT: Return EXACTLY 5 recommendations, no more, no less.\n'
+           + 'IMPORTANT: You MUST return EXACTLY 5 recommendations. The JSON array must contain exactly 5 objects.\n'
            + 'Respond with ONLY this JSON object, nothing else, no markdown:\n'
            + '{"summary":"one sentence personalized intro","recommendations":[{"name":"exact beer name","reason":"one sentence why it fits"},{"name":"exact beer name","reason":"one sentence why it fits"},{"name":"exact beer name","reason":"one sentence why it fits"},{"name":"exact beer name","reason":"one sentence why it fits"},{"name":"exact beer name","reason":"one sentence why it fits"}]}';
   }
